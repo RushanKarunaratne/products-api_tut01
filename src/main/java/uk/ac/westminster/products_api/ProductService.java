@@ -8,50 +8,47 @@ import java.util.Optional;
 
 @Service
 public class ProductService {
+
+    public static ProductController productService;
+    private final List<Product> products = new ArrayList<>();
+    private Long nextId = 1L;
+
+    public ProductService() {
+        products.add(new DigitalProduct(
+                nextId++, "Clean Code (E-book)", 29.99,
+                "/downloads/clean-code.pdf", 4.2));
+
+        products.add(new PhysicalProduct(
+                nextId++, "27-inch Monitor", 249.99,
+                5.4, "61cm x 41cm x 18cm"));
+    }
+    
     public List<Product> getAllProducts() {
-        return getAllProducts();
+        return products;
+    }
+    
+    public Product addProduct(Product product) {
+        product.setId(nextId++);
+        products.add(product);
+        return product;
+    }
+    
+    public Optional<Product> getProductById(Long id) {
+        return products.stream()
+                .filter(p -> p.getId() == id)
+                .findFirst();
+    }
+    
+    public void deleteProduct(Long id) {
+        products.removeIf(p -> p.getId() == id);
+    }
+    
+    public List<Product> findByName(String name) {
+        return products.stream()
+                .filter(p -> p.getName().toLowerCase().contains(name.toLowerCase()))
+                .toList();
     }
 
     public void deleteProduct() {
-        deleteProduct();
-    }
-
-    public List<Product> findByName(String name) {
-        return findByName();
-    }
-
-    private List<Product> findByName() {
-        return findByName();
-    }
-
-    public static class productService{
-        private static List<Product> products = new ArrayList<>();
-        private static Long nextId = 1L;
-
-        public List<Product> getAllProducts() {
-            return products;
-        }
-
-        public static Product addProduct(Product product) {
-            product.setId(nextId++);
-            products.add(product);
-            return product;
-        }
-
-        public static Optional<Product> getProductById(Long id) {
-            return products.stream()
-                    .filter(p -> p.getId() == id)
-                    .findFirst();
-        }
-        public void deleteProduct(Long id) {
-            products.removeIf(p -> p.getId() == id);
-        }
-
-        public List<Product> findByName(String name) {
-            return products.stream()
-                    .filter(p -> p.getName().contains(name))
-                    .toList();
-        }
-
     }
 }
